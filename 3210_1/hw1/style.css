@@ -3,38 +3,38 @@ body {
 }
 header {
     background-color: #1e1e1e;
-    padding: 10px;
+    padding: 30px;
     display: flex;
     align-items: center;
-    gap: 50px;
+    gap: 300px;
 }
 
 .header__logo{
     max-width: 196px;
 }
 .header__text{
-    font-size: 20px;
+    font-size: 25px;
     color: white;
 }
 main{
-    padding: 80px 0;
+    padding: 150px 0;
 }
 h1 {
     margin: 0;
     text-align: center;
-    font-size: 25px;
+    font-size: 30px;
     color: black;
 }
 .text {
     margin: 0;
     text-align: center;
-    font-size: 25px;
+    font-size: 30px;
     color: black;
     margin-bottom: 20px;
 }
 footer {
     background-color: #6e6e6e;
-    padding: 40px;
+    padding: 50px;
 }
 .footer__text {
     margin: 0;
