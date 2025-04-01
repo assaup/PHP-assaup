@@ -11,7 +11,7 @@ class User extends ActiveRecordEntity{
     protected $role;
     protected $passwordHash;
     protected $authToken;
-    protected $createedAt;
+    protected $createdAt;
 
 
     public function setName(string $name){
