@@ -7,5 +7,13 @@
     <a href="<?=dirname($_SERVER['SCRIPT_NAME']);?>/article/<?=$article->getId();?>/edit" class="btn btn-primary">Article update</a>
     <a href="<?=dirname($_SERVER['SCRIPT_NAME']);?>/article/<?=$article->getId();?>/delete" class="btn btn-warning">Article delete</a>
   </div>
+  <div class="card mb-4">
+    <div class="card-body">
+        <h1><?= htmlspecialchars($article->getName()) ?></h1>
+        <p><?= nl2br(htmlspecialchars($article->getText())) ?></p>
+        <!-- Добавленная строка с автором -->
+        <p class="text-muted">Автор: <?= htmlspecialchars($author->getNickName()) ?></p>
+    </div>
+</div>
 </div>
 <?php require dirname(__DIR__).'/footer.php';?>

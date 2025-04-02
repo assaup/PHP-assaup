@@ -25,7 +25,10 @@ class ArticleController {
         if ($article == null){
             throw new NotFoundException();
         }
-        $this->view->renderHtml('article/show', ['article'=>$article]);
+        $this->view->renderHtml('article/show', [
+            'article'=>$article,
+            'author' => $article->getAuthorId()
+        ]);
     }
 
     public function create(){
