@@ -1,48 +1,27 @@
-<?php
-namespace src\Controllers;
+<?php require dirname(__DIR__, 2).'/templates/header.php'; ?>
 
-use src\View\View;
-use src\Models\Comments\Comment;
-use src\Models\Articles\Article;
+<div class="container mt-4">
+    <h2>Редактирование комментария</h2>
+    
+    <?php if (isset($error)): ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
+    <?php endif; ?>
+    
+    <?php if ($comment): ?>
+        <form action="<?= dirname($_SERVER['SCRIPT_NAME']) ?>/comment/<?= $comment->getId() ?>/update" method="POST">
+        <div class="mb-3">
+            <label for="text" class="form-label">Текст комментария</label>
+            <textarea class="form-control" id="text" name="text" rows="5" required><?= 
+                htmlspecialchars($comment->getText()) 
+            ?></textarea>
+        </div>
+        
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+            <a href="/article/<?= $comment->getArticleId() ?>" class="btn btn-secondary">Отмена</a>
+        </div>
+    </form>
+    <?php endif; ?>
+</div>
 
-class CommentController
-{
-    private $view;
-
-    public function __construct()
-    {
-        $this->view = new View(dirname(dirname(__DIR__)).'/templates');
-    }
-
-    public function store(int $articleId)
-    {
-        $comment = new Comment();
-        $comment->setText($_POST['text']);
-        $comment->setAuthorId(1); 
-        $comment->setArticleId($articleId);
-        $comment->save();
-        $bUrl = dirname($_SERVER['SCRIPT_NAME']);
-        header("Location: {$bUrl}/article/{$articleId}#comment{$comment->getId()}");
-    }
-
-    public function edit(int $id)
-    {
-        $comment = Comment::getById($id);
-        if (!$comment) {
-            throw new \Exception();
-        }
-        $this->view->renderHtml3('comment/edit.php', [
-            'comment' => $comment,
-            'error' => null
-        ]);
-    }
-
-    public function update(int $id)
-    {
-        $comment = Comment::getById($id); 
-        $comment->setText($_POST['text']);
-        $comment->save();
-        $rUrl = dirname($_SERVER['SCRIPT_NAME']).'/article/'.$comment->getArticleId().'#comment'.$comment->getId();
-        header("Location: $rUrl");
-    }
-}
+<?php require dirname(__DIR__, 2).'/templates/footer.php'; ?>

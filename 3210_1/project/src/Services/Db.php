@@ -1,45 +1,45 @@
 <?php
-
 namespace src\Services;
 
-use Exceptions\DbException;
+class Db
+{
+    private $pdo;
+    private static $instance;
 
-    class Db{
-        private $pdo;
-        private static $instance;
+    private function __construct()
+    {
+        $dbOptions = require('settings.php');
+        $this->pdo = new \PDO(
+            'mysql:host='.$dbOptions['host'].';dbname='.$dbOptions['dbname'],
+            $dbOptions['user'],
+            $dbOptions['password']
+        );
+        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+    }
 
-        private function __construct()
-        {
-            $dbOptions = require('settings.php');
-
-            try{
-                            $this->pdo = new \PDO(
-                'mysql:host='.$dbOptions['host'].';dbname='.$dbOptions['dbname'],
-                $dbOptions['user'],
-                $dbOptions['password'],
-            );
-            }catch(\PDOException $e){
-                throw new DbException('Ошибка при подключении к базе данных '.$e->getMessage());
-            }
-
-        }
-
-        public function query($sql, $params = [], string $className='stdClass') :?array
-        {
-            $sth = $this->pdo->prepare($sql); 
-            $result = $sth->execute($params); 
-            if ($result == false){
-                return null;
-            }
-            return $sth->fetchAll(\PDO::FETCH_CLASS, $className);
-        }
-
-        public static function getInstance(){
-            if (static::$instance === null){
-                static::$instance = new self();
-            }
-            return static::$instance;
+    public function query(string $sql, array $params = [], string $className = 'stdClass'): array
+    {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute($params);
+            $stmt->setFetchMode(\PDO::FETCH_CLASS, $className);
+            return $stmt->fetchAll();
+        } catch (\PDOException $e) {
+            error_log($e->getMessage());
+            return [];
         }
     }
 
- 
+    public function getLastInsertId(): int
+    {
+        return (int)$this->pdo->lastInsertId();
+    }
+
+    public static function getInstance(): self
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+}

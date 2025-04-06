@@ -1,46 +1,30 @@
 <?php
 
-use Exceptions\DbException;
-use Exceptions\NotFoundException;
-
-try{
-    spl_autoload_register(function(string $className){
-        require_once dirname(__DIR__).'\\'.$className.'.php';
-    });
-
+spl_autoload_register(function(string $className) {
+    $filePath = str_replace('\\', DIRECTORY_SEPARATOR, $className) . '.php';
+    $fullPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . $filePath;
     
-    $findRoute = false;
-    
-    $route = $_GET['route'] ?? '';
-    // var_dump($route);
-    $patterns = require 'route.php';
-    foreach ($patterns as $pattern=>$controllerAndAction){
-        preg_match($pattern, $route, $matches);
-        if (!empty($matches)){
-            $findRoute = true;
-            unset($matches[0]);
-            $nameController = $controllerAndAction[0];
-            $actionName = $controllerAndAction[1];
-            $controller = new $nameController;
-            $controller->$actionName(...$matches);
-            break;
-        }
+    if (file_exists($fullPath)) {
+        require_once $fullPath;
+    } else {
+        throw new Exception("{$fullPath}");
     }
-    
-    if (!$findRoute) throw new Exceptions\NotFoundException();
+});
 
-}catch(DbException $e){
-    $view = new src\View\View(dirname(__DIR__).'/templates');
-    $view->renderHtml('errors/500', ['error'=>$e->getMessage()], 500);
+$findRoute = false;
+$route = $_GET['route'] ?? '';
+
+$patterns = require 'route.php';
+foreach ($patterns as $pattern => $controllerAndAction) {
+    preg_match($pattern, $route, $matches);
+    if (!empty($matches)) {
+        $findRoute = true;
+        unset($matches[0]);
+        $controllerClass = $controllerAndAction[0];
+        $action = $controllerAndAction[1];
+        $controller = new $controllerClass();
+        $controller->$action(...$matches);
+        break;
+    }
 }
-catch(NotFoundException $e){
-    $view = new src\View\View(dirname(__DIR__).'/templates');
-    $view->renderHtml('errors/400', ['error'=>$e->getMessage()], 404);
-}
-
-
-    $user = new src\Models\Users\User('Ivan');
-    $article = new src\Models\Articles\Article('title', 'text', $user);
-
-    // var_dump($user);
-    // var_dump($article);
+if (!$findRoute) echo "Page not found (404)";
