@@ -3,9 +3,9 @@
   $mysqli = mysqli_connect('localhost', 'root', '', 'notebook');
   if(!mysqli_connect_errno()) echo mysqli_connect_error();
 
-  //insert
+  //Блок добавления записи (INSERT)
   if(!empty($_POST) && empty($_GET['id'])){
-    $sql = 'INSERT INTO `notes`
+    $sql = 'INSERT INTO `con`
           (`firstname`, `name`, `lastname`, `date`, `email`, `phone`, `comment`) 
           VALUES (
           \''.htmlspecialchars($_POST['firstname']).'\',
@@ -20,9 +20,9 @@
     if (!mysqli_errno($mysqli)) echo mysqli_error($mysqli);
   }
 
-  //update
+  //Блок обновления записи (UPDATE)
   if (!empty($_POST) && !empty($_GET['id'])){
-    $sql = "UPDATE `notes` SET 
+    $sql = "UPDATE `con` SET 
           `firstname`='".htmlspecialchars($_POST['firstname'])."',
           `name`='".htmlspecialchars($_POST['name'])."',
           `lastname`='".htmlspecialchars($_POST['lastname'])."',
@@ -34,21 +34,19 @@
     if (!mysqli_errno($mysqli)) echo mysqli_error($mysqli);
   }
 
-  //delete 
+  //Блок удаления записи (DELETE)
   if(isset($_GET['id']) && empty($_POST)){
-    $sql = "DELETE FROM `notes` WHERE `id`=".$_GET['id'];
+    $sql = "DELETE FROM `con` WHERE `id`=".$_GET['id'];
     mysqli_query($mysqli, $sql);
     if (!mysqli_errno($mysqli)) echo mysqli_error($mysqli);
   }
-
+  //Подключение нужного файла, если elem не передан, по умолчанию открывается menu
   if(!isset($_GET['elem'])) $_GET['elem'] = 'menu';
+  
+  //подключаются только разрешённые файлы
   if ($_GET['elem'] == 'menu' || $_GET['elem'] == 'add' || $_GET['elem'] == 'delete') require( $_GET['elem'].'.php');
 
   mysqli_close($mysqli);
-  // if(isset($_GET['elem']) && $_GET['elem'] == 'add')
-  //   require('add.php');
-  // if(isset($_GET['elem']) && $_GET['elem'] == 'delete')
-  //   require('delete.php');
 ?>
 
 <?php require('footer.php');?>

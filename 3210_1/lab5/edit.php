@@ -2,7 +2,7 @@
 <?php 
   $mysqli = mysqli_connect('localhost', 'root', '', 'notebook');
   if(!mysqli_connect_errno()) echo mysqli_connect_error();
-  $sql = "SELECT * FROM `notes` WHERE `id`=".$_GET['id'];
+  $sql = "SELECT * FROM `con` WHERE `id`=".$_GET['id'];
   if(!mysqli_errno($mysqli)) echo mysqli_error($mysqli);
   $result = mysqli_query($mysqli, $sql);
   $row = mysqli_fetch_assoc($result);

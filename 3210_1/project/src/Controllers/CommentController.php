@@ -8,23 +8,23 @@ use src\Models\Articles\Article;
 class CommentController
 {
     private $view;
-
+    //Инициализируем сервис View с указанием пути к шаблонам
     public function __construct()
     {
         $this->view = new View(dirname(dirname(__DIR__)).'/templates');
     }
-
+    // Создаем новый комментарий
     public function store(int $articleId)
     {
         $comment = new Comment();
         $comment->setText($_POST['text']);
         $comment->setAuthorId(1); 
-        $comment->setArticleId($articleId);
+        $comment->setArticleId($articleId); // Устанавливаем связь с статьей
         $comment->save();
-        $bUrl = dirname($_SERVER['SCRIPT_NAME']);
+        $bUrl = dirname($_SERVER['SCRIPT_NAME']); // Формируем базовый URL
         header("Location: {$bUrl}/article/{$articleId}#comment{$comment->getId()}");
     }
-
+    //Отображает форму редактирования комментария
     public function edit(int $id)
     {
         $comment = Comment::getById($id);

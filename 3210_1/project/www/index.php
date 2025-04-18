@@ -13,7 +13,7 @@ spl_autoload_register(function(string $className) {
 
 $findRoute = false;
 $route = $_GET['route'] ?? '';
-
+// Поиск совпадения URL с шаблонами
 $patterns = require 'route.php';
 foreach ($patterns as $pattern => $controllerAndAction) {
     preg_match($pattern, $route, $matches);

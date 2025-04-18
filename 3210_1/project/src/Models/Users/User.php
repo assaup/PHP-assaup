@@ -16,15 +16,15 @@ class User extends ActiveRecordEntity // класс User наследуется 
 
     public function setName(string $name): void 
     {
-        $this->nickname = $name;  //свойтсву nickname присвоены значения прееменной $name
+        $this->nickname = $name;  
     }
 
-    public function getNickname(): string // метод должен вернуть строку 
+    public function getNickname(): string  
     {
-        return $this->nickname; // возвращает текущее значение nickanme 
+        return $this->nickname; 
     }
 
-    public function getName(): string // метод должен вернуть строку 
+    public function getName(): string  
     {
         return $this->nickname;
     }

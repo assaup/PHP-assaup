@@ -17,13 +17,13 @@ class ArticleController {
 
 
     public function __construct(){
-        $this->view = new View(dirname(dirname(__DIR__)).'/templates');
-        $this->db = Db::getInstance();
+        $this->view = new View(dirname(dirname(__DIR__)).'/templates'); // Создаем объект View с указанием пути к шаблонам
+        $this->db = Db::getInstance(); // Получаем экземпляр подключения к БД
     }
 
 
     public function index() {
-        $articles = Article::findAll();
+        $articles = Article::findAll(); // Получаем все статьи из базы данных
         $this->view->renderHtml('main/main', ['articles' => $articles]);
     }
 
@@ -33,7 +33,7 @@ class ArticleController {
         if (!$article) {
             throw new NotFoundException();
         }
-
+        // Получаем все комментарии для этой статьи
         $comments = Comment::findAllByArticleId($id) ?? []; 
         
         $this->view->renderHtml('article/show', [
@@ -70,13 +70,13 @@ class ArticleController {
     if (!$article) {
         throw new NotFoundException();
     }
-
+    // Устанавливаем новые значения из POST-запроса
     $article->setName($_POST['name']);
     $article->setText($_POST['text']);
-    $article->save();
+    $article->save(); // Сохраняем изменения в БД
     header('Location:http://localhost/student-241/3210_1/Project/www/');
     }
-
+    // Сохраняем новую статью в базе данных
     public function store(){
         $article = new Article();
         $article->setName($_POST['name']);
