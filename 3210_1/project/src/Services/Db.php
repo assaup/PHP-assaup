@@ -3,12 +3,17 @@ namespace src\Services;
 
 class Db
 {
+    // экземпляр PDO, через который выполняются запросы к базе данных
     private $pdo;
+
+    // Статическое свойство для хранения единственного экземпляра класса Db (реализация паттерна Singleton)
     private static $instance;
 
+    // Приватный конструктор — нельзя создать объект класса напрямую извне, только через getInstance()
     private function __construct()
     {
         $dbOptions = require('settings.php');
+        // Создание подключения к базе через PDO
         $this->pdo = new \PDO(
             'mysql:host='.$dbOptions['host'].';dbname='.$dbOptions['dbname'],
             $dbOptions['user'],
@@ -16,7 +21,7 @@ class Db
         );
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
     }
-
+    // публичный метод для выполнения SQL-запросов
     public function query(string $sql, array $params = [], string $className = 'stdClass'): array
     {
         try {
@@ -34,7 +39,7 @@ class Db
     {
         return (int)$this->pdo->lastInsertId();
     }
-
+    // реализация Singleton
     public static function getInstance(): self
     {
         if (self::$instance === null) {
