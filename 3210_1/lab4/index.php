@@ -2,6 +2,7 @@
 //1
 // $str = 'a1b2c3';
 // // ищет в строке все совпадения с регулярным выражением
+preg_replace('/(\d)/', '$1$1', $str);
 // $res = preg_replace_callback('/\d/', function($match){
 //     return $match[0] . $match[0];
 // }, $str);
@@ -9,7 +10,6 @@
 
 //2
 // $str = 'https://site.ru';
-// // флаг i делает проверку регистронезависимой
 // $reg = '/^https?:\/\/[a-z0-9-]+(\.[a-z]{2,})$/i';
 // if (preg_match($reg, $str)){
 //     echo "Строка является валидным доменом с http/https.";
